@@ -6,6 +6,7 @@ const {
     createUser,
     login,
     renewToken,
+    getUsers,
 } = require("../controllers/authController");
 const router = Router();
 const { check } = require("express-validator");
@@ -34,5 +35,6 @@ router.post(
 );
 
 router.get("/renew", [validateJWT], renewToken);
+router.get("/getUsers", getUsers);
 
 module.exports = router;

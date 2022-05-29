@@ -58,6 +58,7 @@ const login = async (req, res = response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            userType: user.userType,
             token: token,
         });
     } catch (error) {
@@ -76,8 +77,17 @@ const renewToken = async (req, res = response) => {
     });
 };
 
+const getUsers = async (req, res = response) => {
+    res.json({
+        ok:true,
+        response: await User.find({})
+    })
+}
+
+
 module.exports = {
     createUser,
     login,
     renewToken,
+    getUsers
 };
