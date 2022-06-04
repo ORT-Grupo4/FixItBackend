@@ -15,6 +15,7 @@ app.use(express.static("public"));
 app.use(express.json());
 
 app.use("/api/auth", require("./src/routes/auth"));
+app.use("/api/services", require("./src/routes/service"));
 
 app.listen(process.env.PORT, () => {
     console.log(`Server on port ${process.env.PORT}`);
