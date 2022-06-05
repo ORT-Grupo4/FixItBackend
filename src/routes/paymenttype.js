@@ -1,10 +1,11 @@
 const { Router } = require("express");
 
 const {
-    createService,
-    getServices,
-    deleteService,
-} = require("../controllers/ServiceController");
+    createPaymentType,
+    getPaymentTypes,
+    deletePaymentType,
+} = require("../controllers/PaymentTypeController");
+
 const router = Router();
 const { check } = require("express-validator");
 const { validateJWT } = require("../middlewares/validateJWT");
@@ -12,10 +13,9 @@ const { validateJWT } = require("../middlewares/validateJWT");
 router.post(
     "/new",
     [check("name", "name is required").not().isEmpty().trim()],
-    createService
+    createPaymentType
 );
-
-router.get("/getServices", getServices);
-router.put("/delete/:id", deleteService);
+router.get("/getPaymentTypes", getPaymentTypes);
+router.put("/delete/:id", deletePaymentType);
 
 module.exports = router;
