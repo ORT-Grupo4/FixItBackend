@@ -51,8 +51,50 @@ const deleteWork = async(req, res = response) => {
     }
 }
 
+
+const acceptWork = async(req, res = response) => {
+    const workId = req.params.id;
+    try{
+        const work = await Work.findById(workId);
+        if(!work) return res.status(404).json({msg: 'Work not found'});
+        work.state = "aceptado"
+        await Work.findByIdAndUpdate(workId,work,{new:true});
+        res.json({
+            ok:true,
+            msg: 'Work Accepted',
+            work: work
+        })
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({status: 'failed', err: 'Contact an admin'});
+    }
+}
+
+const finalizeWork = async(req, res = response) => {
+    const workId = req.params.id;
+    try{
+        const work = await Work.findById(workId);
+        if(!work) return res.status(404).json({msg: 'Work not found'});
+        work.state = "finalizado"
+        await Work.findOneAndUpdate(work);
+        res.json({
+            ok:true,
+            msg: 'Work Finalized',
+            work: work
+        })
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({status: 'failed', err: 'Contact an admin'});
+    }
+}
+
+
 module.exports= {
     createWork,
     getWorks,
-    deleteWork
+    deleteWork,
+    acceptWork,
+    finalizeWork,
 }

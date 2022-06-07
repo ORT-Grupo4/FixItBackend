@@ -36,6 +36,11 @@ const workSchema= new Schema({
     end:{
         type: Date,
         required:false
+    },
+    state:{
+        type: String,
+        required: true,
+        enum: ['pendiente', 'aceptado', 'finalizado']
     }
 })
 
