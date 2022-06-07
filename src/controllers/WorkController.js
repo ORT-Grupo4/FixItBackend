@@ -14,14 +14,17 @@ const createWork = async (req, res = response) => {
         let paymentTypeBuscado = await PaymentType.findById(paymentType);
         let work = await Work.findOne({userClient,service,paymentType,description});
         if(work) return res.status(400).json({ok: false, msg:'Work already exists'});
+        const fechaActual =  Date.now()
 
         work = new Work({
             userClient: userClient,
             service:serviceBuscado,
             paymentType: paymentTypeBuscado,
             description,
-            state: 'pendiente'
+            state: 'pendiente',
+            start: fechaActual
         });
+        //console.log(work);
         await work.save();
 
         res.status(201).json({
@@ -66,18 +69,19 @@ const deleteWork = async(req, res = response) => {
 
 
 const acceptWork = async(req, res = response) => {
-    const workId = req.params.id;
+    const {workId, userProfessionalId} = req.body;
     try{
         const work = await Work.findById(workId);
-        if(!work) return res.status(404).json({msg: 'Work not found'});
+        let userProfessional  = await User.findById(userProfessionalId);
+        if(!work || work.state != "pendiente") return res.status(404).json({msg: 'Work not found'});
         work.state = "aceptado"
+        work.userProfessional= userProfessional;
         await Work.findByIdAndUpdate(workId,work,{new:true});
         res.json({
             ok:true,
             msg: 'Work Accepted',
             work: work
         })
-
     }catch(error){
         console.log(error);
         res.status(500).json({status: 'failed', err: 'Contact an admin'});
@@ -90,7 +94,8 @@ const finalizeWork = async(req, res = response) => {
         const work = await Work.findById(workId);
         if(!work) return res.status(404).json({msg: 'Work not found'});
         work.state = "finalizado"
-        await Work.findOneAndUpdate(work);
+        work.end = Date.now()
+        await Work.findByIdAndUpdate(workId,work,{new:true});
         res.json({
             ok:true,
             msg: 'Work Finalized',

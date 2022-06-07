@@ -19,7 +19,7 @@ router.post(
     createWork
 );
 
-router.put("/accept/:id",acceptWork);
+router.put("/accept",acceptWork);
 router.put("/finalize/:id",finalizeWork);
 router.get("/getWorks", getWorks);
 router.put("/delete/:id", deleteWork);
