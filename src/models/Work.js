@@ -25,9 +25,10 @@ const workSchema= new Schema({
         type: String,
         required: true
     },
-    cost:{
+    state:{
         type: String,
-        required:false, 
+        required: true,
+        enum: ['pendiente', 'aceptado', 'finalizado']
     },
     start:{
         type: Date,

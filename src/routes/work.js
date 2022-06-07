@@ -15,7 +15,7 @@ const { validateJWT } = require("../middlewares/validateJWT");
 
 router.post(
     "/new",
-    [check("name", "name is required").not().isEmpty().trim()],
+    [],
     createWork
 );
 

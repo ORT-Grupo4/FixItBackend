@@ -1,15 +1,27 @@
 const { response, request} = require('express')
 const Work = require('../models/Work')
+const Service  =require('../models/Service')
+const PaymentType = require('../models/PaymentType')
 const { resolve } = require('path')
+const User = require('../models/User')
 
 
 const createWork = async (req, res = response) => {
     const {userClient,service,paymentType,description} = req.body;
     try{
+        let userClientBuscado  = await User.findById(userClient);
+        let serviceBuscado = await Service.findById(service);
+        let paymentTypeBuscado = await PaymentType.findById(paymentType);
         let work = await Work.findOne({userClient,service,paymentType,description});
         if(work) return res.status(400).json({ok: false, msg:'Work already exists'});
 
-        work = new Work(req.body);
+        work = new Work({
+            userClient: userClient,
+            service:serviceBuscado,
+            paymentType: paymentTypeBuscado,
+            description,
+            state: 'pendiente'
+        });
         await work.save();
 
         res.status(201).json({
@@ -17,6 +29,7 @@ const createWork = async (req, res = response) => {
             work: work.id,
             work: work
         })
+
     }catch(err){
         console.log(err);
         res.status(500).json({status: 'failed', err: 'Contact an admin'});
