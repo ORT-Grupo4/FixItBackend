@@ -17,7 +17,7 @@ const createWork = async (req, res = response) => {
         const fechaActual =  Date.now()
 
         work = new Work({
-            userClient: userClient,
+            userClient: userClientBuscado,
             service:serviceBuscado,
             paymentType: paymentTypeBuscado,
             description,
@@ -43,7 +43,7 @@ const createWork = async (req, res = response) => {
 const getWorks = async (req, res = response) => {
     res.json({
         ok: true, 
-        response: await Work.find({})
+        response: await Work.find({}).populate("userClient").populate("service").populate("paymentType").populate("userProfessional")
     })
 }
 
